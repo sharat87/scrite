@@ -1,13 +1,16 @@
 # screenshot-tracker
 
-FIXME: write description
+A tool to regularly take screen shots and save them, to help me see what the
+hell I've been doing all day.
 
 ## Usage
 
-FIXME: write
+Clone this repo, create a directory called shots in it, install leiningen, and
+do `lein deps` and `lein run`. Watch the screen shots getting collected in the
+shots directory. See core.clj for more customization options.
 
 ## License
 
-Copyright (C) 2011 FIXME
+Copyright (C) 2011 Shrikant Sharat Kandula (shrikantsharat.k at the mighty gmail.com)
 
-Distributed under the Eclipse Public License, the same as Clojure.
+Distributed under the MIT license.
