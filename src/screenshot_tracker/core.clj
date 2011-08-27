@@ -1,4 +1,5 @@
 (ns screenshot-tracker.core
+  (:use screenshot-tracker.wm-utils)
   (:import [java.io File]
            [java.util TimerTask Timer]
            [java.awt Rectangle Toolkit Robot]
@@ -47,15 +48,11 @@
                         (long 5000))
   (println "scheduled to take shots"))
 
-; Get title of current window from the following shell command
-; xwininfo -id $(xprop -root | awk '/_NET_ACTIVE_WINDOW\(WINDOW\)/{print $NF}') | awk -F\" '/^xwininfo:/ { print $2 }'
-
 (defn -main
   []
   (comment save-shot "shot.png")
-  (comment println (format-str "I am {first-name} {last-name}, aged {age}"
-                       {:first-name "Shrikant Sharat"
-                        :last-name "Kandula"
-                        :age 23}))
   (comment save-shot (construct-filename))
+  (comment println (get-active-window-title))
+  (comment println (get-active-window-pid))
+  (comment println (get-active-window-cmd))
   (start-take-shots))
