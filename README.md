@@ -5,12 +5,18 @@ hell I've been doing all day.
 
 ## Usage
 
-Clone this repo, create a directory called shots in it, install leiningen, and
-do `lein deps` and `lein run`. Watch the screen shots getting collected in the
-shots directory. See core.clj for more customization options.
+Clone this repo, create a directory called shots in it, create a new sqlite
+database like this
+
+    $ cat init.sql | sqlite3 scrite.db
+
+Then, install leiningen, and do `lein deps` and `lein run`. Watch the screen
+shots getting collected in the shots directory and associated data into the
+*scrite.db* file. See core.clj for more customization options.
 
 ## License
 
-Copyright (C) 2011 Shrikant Sharat Kandula (shrikantsharat.k at the mighty gmail.com)
+Copyright (C) 2011 Shrikant Sharat Kandula (shrikantsharat.k at the mighty
+gmail.com)
 
 Distributed under the MIT license.

@@ -1,5 +1,12 @@
 (ns screenshot-tracker.wm-utils
+  (:import [java.awt Rectangle Toolkit Robot])
   (:require [clojure.java.shell :as shell]))
+
+(defn get-screenshot-data
+  []
+  (let [screen-rect (Rectangle. (.getScreenSize (Toolkit/getDefaultToolkit)))
+        capture (.createScreenCapture (Robot.) screen-rect)]
+    capture))
 
 (defn get-active-window-id
   []
@@ -10,7 +17,6 @@
     reverse
     peek))
 
-; Ofcourse, this fn is not tested with anything other than :title :)
 (defn get-active-window-prop
   [prop]
   (if (= prop :id)
@@ -29,7 +35,7 @@
     (.substring window-title
                   1
                   (- (.length window-title)
-                     2))))
+                     1))))
 
 (defn get-active-window-pid
   []
