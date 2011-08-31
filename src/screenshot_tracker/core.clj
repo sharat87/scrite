@@ -1,6 +1,7 @@
 (ns screenshot-tracker.core
   (:require [screenshot-tracker.recorders :as recorders]
-            [screenshot-tracker.wm-utils :as wm-utils])
+            [screenshot-tracker.wm-utils :as wm-utils]
+            [screenshot-tracker.gui :as gui])
   (:require [clj-time.core :as ctime]))
 
 (def *filename-format* "shots/shot-{month}-{date}-{hour}-{minute}-{second}")
@@ -52,4 +53,6 @@
      {:title (wm-utils/get-active-window-title)
       :cmd (wm-utils/get-active-window-cmd)}
      (wm-utils/get-screenshot-data))
-  (shoot-every 5 (recorders/get-sql-recorder "scrite.db")))
+  (comment shoot-every 5 (recorders/get-sql-recorder "scrite.db"))
+  (comment .start (Thread. (fn [] (shoot-every 5 (recorders/get-sql-recorder "scrite.db")))))
+  (gui/show-main))
