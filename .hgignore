@@ -1,3 +1,4 @@
 syntax: glob
 shots
+lib
 classes
