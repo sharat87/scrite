@@ -38,8 +38,6 @@
     (let [filename (construct-filename)]
       (save-fn
         {:title (wm-utils/get-active-window-title)
-         ; FIXME: Command sniffing has problems. xprop is not able to detect pid for java windows.
-         :cmd "Dummy cmd" ;(wm-utils/get-active-window-cmd)
          :img filename}
         (wm-utils/get-screenshot-data))
       (println "Saved shot " filename)))

@@ -9,11 +9,10 @@
   (let [db-con (DriverManager/getConnection "jdbc:sqlite:scrite.db")
         stmt (.prepareStatement
                db-con
-               "INSERT INTO shots (title, cmd, img) VALUES (?, ?, ?);")]
+               "INSERT INTO shots (title, img) VALUES (?, ?);")]
     (fn [item image-data]
       (doto stmt
         (.setString 1 (:title item))
-        (.setString 2 (:cmd item))
-        (.setString 3 (:img item))
+        (.setString 2 (:img item))
         .execute)
       (ImageIO/write image-data "png" (File. (str (:img item) ".png"))))))

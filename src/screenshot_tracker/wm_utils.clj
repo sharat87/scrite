@@ -36,16 +36,3 @@
                   1
                   (- (.length window-title)
                      1))))
-
-(defn get-active-window-pid
-  []
-  (get-active-window-prop "_NET_WM_PID"))
-
-(defn get-active-window-cmd
-  []
-  (->
-    (shell/sh "ps" "-o" "cmd" (get-active-window-pid))
-    :out
-    (.split "\n")
-    reverse
-    peek))
