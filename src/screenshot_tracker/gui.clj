@@ -1,8 +1,15 @@
 (ns screenshot-tracker.gui
+  (:require [screenshot-tracker.recorders :as recorders])
   (:use seesaw.core
         [seesaw.chooser :only (choose-file)]))
 
 (defn id [& args] args)
+
+(defn make-recorder
+  []
+  (recorders/get-sql-recorder
+    "scrite.db"
+    "shots/shot-{month}-{date}-{hour}-{minute}-{second}"))
 
 (defn show-main
   [&{:keys [on-start on-pause on-resume] :or {on-start id, on-pause id, on-resume id}}]
@@ -27,7 +34,7 @@
         start-stop-btn (action :name "Start/Stop"
                                :handler (fn [e]
                                           (cond
-                                            (= @status :init) (do (on-start e) (set-started))
+                                            (= @status :init) (do (on-start e (make-recorder)) (set-started))
                                             (= @status :started) (do (on-pause e) (set-stopped))
                                             (= @status :stopped) (do (on-resume e) (set-started)))))]
     (-> (frame :title "Scrite"

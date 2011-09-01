@@ -16,17 +16,14 @@
 (defn start-shooting
   []
   (let [channel (atom {:shoot? true})
-        recorder (recorders/get-sql-recorder
-                   "scrite.db"
-                   "shots/shot-{month}-{date}-{hour}-{minute}-{second}")
-        start-shooter (fn [] (.start (Thread.
+        start-shooter (fn [recorder] (.start (Thread.
                                        (fn [] (shoot-every
                                                 channel
                                                 5
                                                 recorder)))))]
     (gui/show-main
-      :on-start (fn [e]
-                  (start-shooter))
+      :on-start (fn [e recorder]
+                  (start-shooter recorder))
       :on-pause (fn [e]
                   (swap! channel assoc :shoot? false))
       :on-resume (fn [e]
