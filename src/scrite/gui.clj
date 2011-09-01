@@ -25,19 +25,20 @@
                                                                 :text (.getPath file))))))
         file-format-input (text "shot-{month}-{date}-{hour}-{minute}-{second}.png")
         status-display (label :text "Ready")
-        set-started (fn []
-                      (swap! running? not)
-                      (config! status-display :text "Shooting"))
-        set-stopped (fn []
-                      (swap! running? not)
-                      (config! status-display :text "Paused"))
+        start-shooting (fn [e]
+                         (on-start e (make-recorder (config save-location-input :text)
+                                                    (config file-format-input :text)))
+                         (swap! running? not)
+                         (config! status-display :text "Shooting"))
+        stop-shooting (fn [e]
+                        (on-stop e)
+                        (swap! running? not)
+                        (config! status-display :text "Paused"))
         start-stop-btn (action :name "Start/Stop"
                                :handler (fn [e]
                                           (if @running?
-                                            (do (on-stop e) (set-stopped))
-                                            (do (on-start e (make-recorder (config save-location-input :text)
-                                                                           (config file-format-input :text)))
-                                              (set-started)))))]
+                                            (stop-shooting e)
+                                            (start-shooting e))))]
     (-> (frame :title "Scrite"
                :on-close :exit
                :content (mig-panel

@@ -29,6 +29,8 @@
                                            keep-shooting?)))))]
     (gui/show-main
       :on-start (fn [e recorder]
+                  ; FIXME: The same instance of the keep-shooting? atom is being use over and over again
+                  (swap! keep-shooting? (fn [_] true))
                   (start-shooter recorder))
       :on-stop (fn [e]
                  (swap! keep-shooting? not)))))
