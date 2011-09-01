@@ -1,45 +1,37 @@
 (ns screenshot-tracker.gui
-  (:import [javax.swing SwingUtilities JFrame JPanel JLabel JTextField
-            BorderFactory Box BoxLayout]
-           [java.awt GridBagLayout GridBagConstraints BorderLayout Dimension]))
+  (:use seesaw.core
+        [seesaw.chooser :only (choose-file)]))
 
-(defn get-main-pane
-  []
-  (let [main-pane (JPanel.)
-        location-box (JPanel.)]
+(defn id [& args] args)
 
-
-    (comment doto location-box
-      (.setLayout (BoxLayout. location-box BoxLayout/X_AXIS))
-      (.add (doto (JLabel. "Location to save screenshots")
-              (.setBorder (BorderFactory/createEmptyBorder 5 5 5 5))))
-      (.add (JTextField. 20))
-      (.setMaximumSize (Dimension. 500 70)))
-
-    (doto main-pane
-      (.setLayout (GridBagLayout.))
-      ;(.setLayout (BoxLayout. main-pane BoxLayout/Y_AXIS))
-      (.add location-box))
-
-    (let [label (JLabel. "Save screenshots in")
-          gc (let [constraints GridBagConstraints.]
-               (set! (constraints fill) GridBagConstraints/HORIZONTAL)
-               (set! (constraints gridx) 0)
-               (set! (constraints gridy) 0)
-               constraints)]
-      (.add main-pane label gc))))
-
-(defn -main
-  []
-  (let [frame (JFrame.)
-        main-pane (get-main-pane)]
-    (doto frame
-      (.setTitle "Screenshot takey")
-      (.setSize 600 400)
-      ;(.setContentPane main-pane)
-      (.add main-pane BorderLayout/CENTER)
-      (.setLocationRelativeTo nil)
-      (.setDefaultCloseOperation JFrame/EXIT_ON_CLOSE)
-      (.setVisible true))))
-
-(SwingUtilities/invokeLater -main)
+(defn show-main
+  [&{:keys [on-start on-stop] :or {on-start id, on-stop id}}]
+  (let [save-location-input (text :size [350 :by 30] :text ".")
+        save-location-btn (action
+                            :name "..."
+                            :handler (fn [e]
+                                       (choose-file
+                                         :type :save
+                                         :selection-mode :dirs-only
+                                         :success-fn (fn [chooser file]
+                                                       (config! save-location-input
+                                                                :text (.getPath file))))))]
+    (-> (frame :title "Scrite"
+               :on-close :exit
+               :content (vertical-panel
+                          :border 10
+                          :items [(horizontal-panel
+                                    :items ["Enter save location"
+                                            [:fill-h 10]
+                                            save-location-input
+                                            [:fill-h 10]
+                                            save-location-btn])
+                                  [:fill-v 15]
+                                  (horizontal-panel
+                                    :items [(action :name "Start/Resume"
+                                                    :handler #(on-start %))
+                                            [:fill-h 10]
+                                            (action :name "Stop/Pause"
+                                                    :handler #(on-stop %))])]))
+      pack!
+      show!)))
