@@ -1,16 +1,20 @@
 (ns scrite.shoot
   (:require [scrite.recorders :as recorders]
             [scrite.wm-utils :as wm-utils]
-            [scrite.gui :as gui]))
+            [scrite.gui :as gui])
+  (:import java.awt.MouseInfo))
 
 (defn shoot-every
   "Save scrites every `time-gap` seconds, by calling the `save-fn` to save the scrite"
   [channel time-gap save-fn]
   (if (@channel :shoot?)
-    (save-fn
-      {:title (wm-utils/get-active-window-title)
-       :class (wm-utils/get-active-window-class)}
-      (wm-utils/get-screenshot-data)))
+    (let [mouse-pos (. (MouseInfo/getPointerInfo) getLocation)]
+      (save-fn
+        {:title (wm-utils/get-active-window-title)
+         :class (wm-utils/get-active-window-class)
+         :mouse-x (.x mouse-pos)
+         :mouse-y (.y mouse-pos)}
+        (wm-utils/get-screenshot-data))))
   (Thread/sleep (long (* time-gap 1000)))
   (recur channel time-gap save-fn))
 

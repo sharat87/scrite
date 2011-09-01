@@ -35,13 +35,15 @@
         db-con (DriverManager/getConnection con-str)
         stmt (.prepareStatement
                db-con
-               "INSERT INTO shots (title, class, filename) VALUES (?, ?, ?);")]
+               "INSERT INTO shots (title, class, mouse_x, mouse_y, filename) VALUES (?, ?, ?, ?, ?);")]
     (fn [item image-data]
       (let [filename (str (construct-filename filename-format))]
         (doto stmt
           (.setString 1 (:title item))
           (.setString 2 (:class item))
-          (.setString 3 filename)
+          (.setInt 3 (:mouse-x item))
+          (.setInt 4 (:mouse-y item))
+          (.setString 5 filename)
           .execute)
         (ImageIO/write image-data "png" (File. filename))
         (println "Saved shot " filename)))))
