@@ -1,7 +1,8 @@
 (ns screenshot-tracker.gui
   (:require [screenshot-tracker.recorders :as recorders])
   (:use seesaw.core
-        [seesaw.chooser :only (choose-file)]))
+        [seesaw.chooser :only (choose-file)]
+        [seesaw.mig :only (mig-panel)]))
 
 (defn id [& args] args)
 
@@ -12,7 +13,7 @@
 (defn show-main
   [&{:keys [on-start on-pause on-resume] :or {on-start id, on-pause id, on-resume id}}]
   (let [status (atom :init)
-        save-location-input (text :size [350 :by 30] :text ".")
+        save-location-input (text ".")
         save-location-btn (action
                             :name "..."
                             :handler (fn [e]
@@ -22,8 +23,7 @@
                                          :success-fn (fn [chooser file]
                                                        (config! save-location-input
                                                                 :text (.getPath file))))))
-        file-format-input (text :size [350 :by 30]
-                                :text "shot-{month}-{date}-{hour}-{minute}-{second}.png")
+        file-format-input (text "shot-{month}-{date}-{hour}-{minute}-{second}.png")
         status-display (label :text "Ready")
         set-started (fn []
                       (swap! status (fn [_] :started))
@@ -41,25 +41,15 @@
                                             (= @status :stopped) (do (on-resume e) (set-started)))))]
     (-> (frame :title "Scrite"
                :on-close :exit
-               :content (vertical-panel
-                          :border 10
-                          :items [(horizontal-panel
-                                    :items ["Enter save location"
-                                            [:fill-h 10]
-                                            save-location-input
-                                            [:fill-h 10]
-                                            save-location-btn])
-                                  [:fill-v 15]
-                                  (horizontal-panel
-                                    :items ["Images saved as"
-                                            [:fill-h 10]
-                                            file-format-input])
-                                  [:fill-v 15]
-                                  (horizontal-panel
-                                    :items [status-display
-                                            [:fill-h 10]
-                                            start-stop-btn
-                                            :fill-h
-                                            (action :name "Help")])]))
+               :content (mig-panel
+                                    :constraints ["" "[right][300]" "[][]20[]"]
+                                    :items [["Enter save location"]
+                                            [save-location-input "growx, split 2"]
+                                            [save-location-btn "wrap"]
+                                            ["Images saved as"]
+                                            [file-format-input "growx, wrap"]
+                                            [start-stop-btn "split 2"]
+                                            [status-display]
+                                            [(action :name "Help") "align right"]]))
       pack!
       show!)))
