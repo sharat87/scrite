@@ -41,7 +41,7 @@
         (doto stmt
           (.setString 1 (:title item))
           (.setString 2 (:class item))
-          (.setString 3 (:filename item))
+          (.setString 3 filename)
           .execute)
         (ImageIO/write image-data "png" (File. filename))
         (println "Saved shot " filename)))))
