@@ -36,3 +36,8 @@
                   1
                   (- (.length window-title)
                      1))))
+
+(defn get-active-window-class
+  []
+  (let [window-class (get-active-window-prop "WM_CLASS")]
+    window-class))

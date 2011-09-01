@@ -8,7 +8,8 @@
   [channel time-gap save-fn]
   (if (@channel :shoot?)
     (save-fn
-      {:title (wm-utils/get-active-window-title)}
+      {:title (wm-utils/get-active-window-title)
+       :class (wm-utils/get-active-window-class)}
       (wm-utils/get-screenshot-data)))
   (Thread/sleep (long (* time-gap 1000)))
   (recur channel time-gap save-fn))
