@@ -1,4 +1,4 @@
-(ns screenshot-tracker.wm-utils
+(ns scrite.wm-utils
   (:import [java.awt Rectangle Toolkit Robot])
   (:require [clojure.java.shell :as shell]))
 

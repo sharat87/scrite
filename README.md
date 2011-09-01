@@ -1,4 +1,4 @@
-# screenshot-tracker
+# Scrite
 
 A tool to regularly take screen shots and save them, to help me see what the
 hell I've been doing all day.

@@ -1,7 +1,7 @@
-(ns screenshot-tracker.shoot
-  (:require [screenshot-tracker.recorders :as recorders]
-            [screenshot-tracker.wm-utils :as wm-utils]
-            [screenshot-tracker.gui :as gui]))
+(ns scrite.shoot
+  (:require [scrite.recorders :as recorders]
+            [scrite.wm-utils :as wm-utils]
+            [scrite.gui :as gui]))
 
 (defn shoot-every
   "Save scrites every `time-gap` seconds, by calling the `save-fn` to save the scrite"

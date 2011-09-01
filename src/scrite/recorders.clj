@@ -1,4 +1,4 @@
-(ns screenshot-tracker.recorders
+(ns scrite.recorders
   (:import [java.sql DriverManager]
            [java.io File]
            [javax.imageio ImageIO])

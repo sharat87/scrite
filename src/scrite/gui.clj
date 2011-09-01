@@ -1,5 +1,5 @@
-(ns screenshot-tracker.gui
-  (:require [screenshot-tracker.recorders :as recorders])
+(ns scrite.gui
+  (:require [scrite.recorders :as recorders])
   (:use seesaw.core
         [seesaw.chooser :only (choose-file)]
         [seesaw.mig :only (mig-panel)]))
