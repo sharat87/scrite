@@ -29,12 +29,10 @@
   []
   (format-str *filename-format* (get-filename-format-data)))
 
-(def shooting? (atom nil))
-
 (defn shoot-every
   "Save scrites every `time-gap` seconds, by calling the `save-fn` to save the scrite"
-  [time-gap save-fn]
-  (if @shooting?
+  [channel time-gap save-fn]
+  (if (@channel :shoot?)
     (let [filename (construct-filename)]
       (save-fn
         {:title (wm-utils/get-active-window-title)
@@ -42,18 +40,19 @@
         (wm-utils/get-screenshot-data))
       (println "Saved shot " filename)))
   (Thread/sleep (long (* time-gap 1000)))
-  (recur time-gap save-fn))
+  (recur channel time-gap save-fn))
 
 (defn start-shooting
   []
-  (gui/show-main
-    :on-start (fn [e]
-                (if (nil? @shooting?)
-                  (.start (Thread.
-                            (fn [] (shoot-every 5 (recorders/get-sql-recorder "scrite.db"))))))
-                (swap! shooting? not))
-    :on-stop (fn [e]
-               (swap! shooting? not))))
+  (let [channel (atom {:shoot? nil})]
+    (gui/show-main
+      :on-start (fn [e]
+                  (if (nil? (@channel :shoot?))
+                    (.start (Thread.
+                              (fn [] (shoot-every channel 5 (recorders/get-sql-recorder "scrite.db"))))))
+                  (swap! channel assoc :shoot? true))
+      :on-stop (fn [e]
+                 (swap! channel assoc :shoot? false)))))
 
 (defn -main
   []
