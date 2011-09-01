@@ -11,8 +11,8 @@
   (apply recorders/get-sql-recorder args))
 
 (defn show-main
-  [&{:keys [on-start on-pause on-resume] :or {on-start id, on-pause id, on-resume id}}]
-  (let [status (atom :init)
+  [&{:keys [on-start on-stop] :or {on-start id, on-stop id}}]
+  (let [running? (atom false)
         save-location-input (text ".")
         save-location-btn (action
                             :name "..."
@@ -26,30 +26,29 @@
         file-format-input (text "shot-{month}-{date}-{hour}-{minute}-{second}.png")
         status-display (label :text "Ready")
         set-started (fn []
-                      (swap! status (fn [_] :started))
+                      (swap! running? not)
                       (config! status-display :text "Shooting"))
         set-stopped (fn []
-                      (swap! status (fn [_] :stopped))
+                      (swap! running? not)
                       (config! status-display :text "Paused"))
         start-stop-btn (action :name "Start/Stop"
                                :handler (fn [e]
-                                          (cond
-                                            (= @status :init) (do (on-start e (make-recorder (config save-location-input :text)
-                                                                                             (config file-format-input :text)))
-                                                                (set-started))
-                                            (= @status :started) (do (on-pause e) (set-stopped))
-                                            (= @status :stopped) (do (on-resume e) (set-started)))))]
+                                          (if @running?
+                                            (do (on-stop e) (set-stopped))
+                                            (do (on-start e (make-recorder (config save-location-input :text)
+                                                                           (config file-format-input :text)))
+                                              (set-started)))))]
     (-> (frame :title "Scrite"
                :on-close :exit
                :content (mig-panel
-                                    :constraints ["" "[right][300]" "[][]20[]"]
-                                    :items [["Enter save location"]
-                                            [save-location-input "growx, split 2"]
-                                            [save-location-btn "wrap"]
-                                            ["Images saved as"]
-                                            [file-format-input "growx, wrap"]
-                                            [start-stop-btn "split 2"]
-                                            [status-display]
-                                            [(action :name "Help") "align right"]]))
+                          :constraints ["" "[right][300]" "[][]20[]"]
+                          :items [["Enter save location"]
+                                  [save-location-input "growx, split 2"]
+                                  [save-location-btn "wrap"]
+                                  ["Images saved as"]
+                                  [file-format-input "growx, wrap"]
+                                  [start-stop-btn "split 2"]
+                                  [status-display]
+                                  [(action :name "Help") "align right"]]))
       pack!
       show!)))
