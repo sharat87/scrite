@@ -25,14 +25,19 @@
     (format-str filename-format format-data)))
 
 (defn get-sql-recorder
-  [db-path filename-format]
+  [save-location filename-format]
   (Class/forName "org.sqlite.JDBC")
-  (let [db-con (DriverManager/getConnection "jdbc:sqlite:scrite.db")
+  (let [save-location (.getCanonicalPath (File. save-location))
+        filename-format (if (.isAbsolute (File. filename-format))
+                          filename-format
+                          (.getCanonicalPath (File. filename-format)))
+        con-str (str "jdbc:sqlite:" save-location File/separator "scrite.db")
+        db-con (DriverManager/getConnection con-str)
         stmt (.prepareStatement
                db-con
                "INSERT INTO shots (title, img) VALUES (?, ?);")]
     (fn [item image-data]
-      (let [filename (str (construct-filename filename-format) ".png")]
+      (let [filename (str (construct-filename filename-format))]
         (doto stmt
           (.setString 1 (:title item))
           (.setString 2 (:img item))

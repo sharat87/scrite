@@ -6,10 +6,8 @@
 (defn id [& args] args)
 
 (defn make-recorder
-  []
-  (recorders/get-sql-recorder
-    "scrite.db"
-    "shots/shot-{month}-{date}-{hour}-{minute}-{second}"))
+  [& args]
+  (apply recorders/get-sql-recorder args))
 
 (defn show-main
   [&{:keys [on-start on-pause on-resume] :or {on-start id, on-pause id, on-resume id}}]
@@ -24,6 +22,8 @@
                                          :success-fn (fn [chooser file]
                                                        (config! save-location-input
                                                                 :text (.getPath file))))))
+        file-format-input (text :size [350 :by 30]
+                                :text "shot-{month}-{date}-{hour}-{minute}-{second}.png")
         status-display (label :text "Ready")
         set-started (fn []
                       (swap! status (fn [_] :started))
@@ -34,7 +34,9 @@
         start-stop-btn (action :name "Start/Stop"
                                :handler (fn [e]
                                           (cond
-                                            (= @status :init) (do (on-start e (make-recorder)) (set-started))
+                                            (= @status :init) (do (on-start e (make-recorder (config save-location-input :text)
+                                                                                             (config file-format-input :text)))
+                                                                (set-started))
                                             (= @status :started) (do (on-pause e) (set-stopped))
                                             (= @status :stopped) (do (on-resume e) (set-started)))))]
     (-> (frame :title "Scrite"
@@ -49,8 +51,15 @@
                                             save-location-btn])
                                   [:fill-v 15]
                                   (horizontal-panel
+                                    :items ["Images saved as"
+                                            [:fill-h 10]
+                                            file-format-input])
+                                  [:fill-v 15]
+                                  (horizontal-panel
                                     :items [status-display
                                             [:fill-h 10]
-                                            start-stop-btn])]))
+                                            start-stop-btn
+                                            :fill-h
+                                            (action :name "Help")])]))
       pack!
       show!)))
