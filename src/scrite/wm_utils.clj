@@ -1,6 +1,31 @@
 (ns scrite.wm-utils
   (:import [java.awt Rectangle Toolkit Robot])
-  (:require [clojure.java.shell :as shell]))
+  (:require [clojure.java.shell :as shell])
+  (:use [clojure.contrib.string :only (chomp split split-lines)]))
+
+(defn to-hex
+  [n]
+  (format "0x%08x" n))
+
+(defn active-window-details
+  "Get details about the active window. Code stolen from sikuli (clojurified).
+  Currently, linux only."
+  []
+  (let [window-id (->
+                     (shell/sh "xdotool" "getactivewindow")
+                     :out
+                     chomp
+                    Integer/parseInt
+                     to-hex)
+        all-window-lines (->
+                      (shell/sh "wmctrl" "-lpGx")
+                      :out
+                      split-lines)
+        all-windows (map #(zipmap
+                              [:id :desk :pid :x :y :w :h :class :host :title]
+                              (split #"\s+" 10 %))
+                         all-window-lines)]
+    (first (filter #(= window-id (:id %)) all-windows))))
 
 (defn get-screenshot-data
   []
