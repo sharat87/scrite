@@ -4,6 +4,8 @@
         [seesaw.chooser :only (choose-file)]
         [seesaw.mig :only (mig-panel)]))
 
+(native!)
+
 (defn id [& args] args)
 
 (defn make-recorder
@@ -42,7 +44,7 @@
     (-> (frame :title "Scrite"
                :on-close :exit
                :content (mig-panel
-                          :constraints ["" "[right][300]" "[][]20[]"]
+                          :constraints ["" "[right][420]" "[][]20[]"]
                           :items [["Enter save location"]
                                   [save-location-input "growx, split 2"]
                                   [save-location-btn "wrap"]
