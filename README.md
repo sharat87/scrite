@@ -16,7 +16,6 @@ shots getting collected in the shots directory and associated data into the
 
 ## License
 
-Copyright (C) 2011 Shrikant Sharat Kandula (shrikantsharat.k at the mighty
-gmail.com)
+Copyright (C) 2011 Shrikant Sharat Kandula (self@sharats.me)
 
 Distributed under the MIT license.
