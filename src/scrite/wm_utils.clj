@@ -1,7 +1,7 @@
 (ns scrite.wm-utils
   (:import [java.awt Rectangle Toolkit Robot])
   (:require [clojure.java.shell :as shell])
-  (:use [clojure.contrib.string :only (chomp split split-lines)]))
+  (:use [clojure.string :only (trim-newline split split-lines)]))
 
 (defn to-hex
   [n]
@@ -14,7 +14,7 @@
   (let [window-id (->
                      (shell/sh "xdotool" "getactivewindow")
                      :out
-                     chomp
+                     trim-newline
                     Integer/parseInt
                      to-hex)
         all-window-lines (->
