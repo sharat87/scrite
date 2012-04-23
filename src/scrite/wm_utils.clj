@@ -12,18 +12,18 @@
   Currently, linux only."
   []
   (let [window-id (->
-                     (shell/sh "xdotool" "getactivewindow")
-                     :out
-                     trim-newline
+                    (shell/sh "xdotool" "getactivewindow")
+                    :out
+                    trim-newline
                     Integer/parseInt
-                     to-hex)
+                    to-hex)
         all-window-lines (->
-                      (shell/sh "wmctrl" "-lpGx")
-                      :out
-                      split-lines)
+                           (shell/sh "wmctrl" "-lpGx")
+                           :out
+                           split-lines)
         all-windows (map #(zipmap
-                              [:id :desk :pid :x :y :w :h :class :host :title]
-                              (split #"\s+" 10 %))
+                            [:id :desk :pid :x :y :w :h :class :host :title]
+                            (split #"\s+" 10 %))
                          all-window-lines)]
     (first (filter #(= window-id (:id %)) all-windows))))
 
@@ -58,9 +58,9 @@
   []
   (let [window-title (get-active-window-prop "WM_NAME")]
     (.substring window-title
-                  1
-                  (- (.length window-title)
-                     1))))
+                1
+                (- (.length window-title)
+                   1))))
 
 (defn get-active-window-class
   []
