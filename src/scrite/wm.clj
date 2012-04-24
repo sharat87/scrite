@@ -3,7 +3,11 @@
   (:require [clojure.java.shell :as shell])
   (:use [clojure.string :only (trim-newline split split-lines)]))
 
-(def current-os (System/getProperty "os.name"))
+(def current-os
+  (let [os-name (System/getProperty "os.name")]
+    (cond
+      (= os-name "Linux") :linux
+      (.startsWith os-name "Windows") :windows)))
 
 (defmulti active-window-details
   "Get details about the active window."

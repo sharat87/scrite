@@ -4,7 +4,7 @@
 
 ; Initialize OS-specific implementations of window manager functions.
 (require (case wm/current-os
-           "Linux" 'scrite.wm.linux))
+           :linux 'scrite.wm.linux))
 
 (defn -main
   []
