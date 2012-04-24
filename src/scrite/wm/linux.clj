@@ -11,14 +11,12 @@
 ; Code stolen from sikuli (clojurified).
 (defmethod active-window-details :linux
   []
-  (let [window-id (->
-                    (shell/sh "xdotool" "getactivewindow")
+  (let [window-id (-> (shell/sh "xdotool" "getactivewindow")
                     :out
                     trim-newline
                     Integer/parseInt
                     to-hex)
-        all-window-lines (->
-                           (shell/sh "wmctrl" "-lpGx")
+        all-window-lines (-> (shell/sh "wmctrl" "-lpGx")
                            :out
                            split-lines)
         all-windows (map #(zipmap
@@ -35,8 +33,7 @@
 
 (defn get-active-window-id
   []
-  (->
-    (shell/sh "xprop" "-root" "_NET_ACTIVE_WINDOW")
+  (-> (shell/sh "xprop" "-root" "_NET_ACTIVE_WINDOW")
     :out
     (.split " ")
     reverse
@@ -46,8 +43,7 @@
   [prop]
   (if (= prop :id)
     (get-active-window-id)
-    (let [prop-value (->
-                       (shell/sh "xprop" "-id" (get-active-window-id) prop)
+    (let [prop-value (-> (shell/sh "xprop" "-id" (get-active-window-id) prop)
                        :out
                        (.split " = " 2)
                        (nth 1)
