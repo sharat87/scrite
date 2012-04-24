@@ -21,7 +21,7 @@
                            split-lines)
         all-windows (map #(zipmap
                             [:id :desk :pid :x :y :w :h :class :host :title]
-                            (split #"\s+" 10 %))
+                            (split % #"\s+" 10))
                          all-window-lines)]
     (first (filter #(= window-id (:id %)) all-windows))))
 
