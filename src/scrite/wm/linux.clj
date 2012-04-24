@@ -9,7 +9,7 @@
   (format "0x%08x" n))
 
 ; Code stolen from sikuli (clojurified).
-(defmethod active-window-details "Linux"
+(defmethod active-window-details :linux
   []
   (let [window-id (->
                     (shell/sh "xdotool" "getactivewindow")
@@ -27,7 +27,7 @@
                          all-window-lines)]
     (first (filter #(= window-id (:id %)) all-windows))))
 
-(defmethod get-screenshot-data "Linux"
+(defmethod get-screenshot-data :linux
   []
   (let [screen-rect (Rectangle. (.getScreenSize (Toolkit/getDefaultToolkit)))
         capture (.createScreenCapture (Robot.) screen-rect)]
