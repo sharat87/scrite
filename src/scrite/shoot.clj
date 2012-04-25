@@ -13,7 +13,8 @@
     capture))
 
 (defn shoot-every
-  "Save scrites every `time-gap` seconds, by calling the `save-fn` to save the scrite"
+  "Save scrites every `time-gap` seconds, by calling the `save-fn` to save the
+  scrite"
   [time-gap save-fn keep-shooting?]
   (when @keep-shooting?
     (let [active-window (wm/active-window-details)
@@ -37,7 +38,8 @@
                                            keep-shooting?)))))]
     (gui/show-main
       :on-start (fn [e recorder]
-                  ; FIXME: The same instance of the keep-shooting? atom is being use over and over again
+                  ; FIXME: The same instance of the keep-shooting? atom is being
+                  ; use over and over again
                   (swap! keep-shooting? (fn [_] true))
                   (start-shooter recorder))
       :on-stop (fn [e]

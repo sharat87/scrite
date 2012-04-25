@@ -35,7 +35,9 @@
         db-con (DriverManager/getConnection con-str)
         stmt (.prepareStatement
                db-con
-               "INSERT INTO shots (title, class, mouse_x, mouse_y, filename) VALUES (?, ?, ?, ?, ?);")]
+               (str "INSERT INTO shots "
+                    "(title, class, mouse_x, mouse_y, filename) "
+                    "VALUES (?, ?, ?, ?, ?);"))]
     (fn [item image-data]
       (let [filename (str (construct-filename filename-format))]
         (doto stmt

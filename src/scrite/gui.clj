@@ -25,11 +25,15 @@
                                          :success-fn (fn [chooser file]
                                                        (config! save-location-input
                                                                 :text (.getPath file))))))
-        file-format-input (text "shot-{month}-{date}-{hour}-{minute}-{second}.png")
+        file-format-input (text
+                            "shot-{month}-{date}-{hour}-{minute}-{second}.png")
         status-display (label :text "Ready")
         start-shooting (fn [e]
-                         (on-start e (make-recorder (config save-location-input :text)
-                                                    (config file-format-input :text)))
+                         (on-start
+                           e
+                           (make-recorder
+                             (config save-location-input :text)
+                             (config file-format-input :text)))
                          (swap! running? not)
                          (config! status-display :text "Shooting"))
         stop-shooting (fn [e]
