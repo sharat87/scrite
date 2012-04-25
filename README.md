@@ -18,6 +18,11 @@ Then, install leiningen, and do `lein deps` and `lein run`. Watch the screen
 shots getting collected in the shots directory and associated data into the
 *scrite.db* file. See core.clj for more customization options.
 
+## Todo
+
+- Make it easier to get up and running.
+- Interface for viewing collected data.
+
 ## License
 
 Copyright (C) 2011 Shrikant Sharat Kandula (self@sharats.me)
