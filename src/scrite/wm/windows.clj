@@ -1,7 +1,6 @@
 (ns scrite.wm.windows
   (:import com.sun.jna.Native
            com.sun.jna.platform.win32.User32)
-  (:import [java.awt Rectangle Toolkit Robot])
   (:use scrite.wm))
 
 (defn- active-window
@@ -24,9 +23,3 @@
   []
   {:title (active-window-title)
    :class (active-window-class)})
-
-(defmethod get-screenshot-data :windows
-  []
-  (let [screen-rect (Rectangle. (.getScreenSize (Toolkit/getDefaultToolkit)))
-        capture (.createScreenCapture (Robot.) screen-rect)]
-    capture))

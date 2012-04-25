@@ -1,7 +1,4 @@
-(ns scrite.wm
-  (:import [java.awt Rectangle Toolkit Robot])
-  (:require [clojure.java.shell :as shell])
-  (:use [clojure.string :only (trim-newline split split-lines)]))
+(ns scrite.wm)
 
 (def current-os
   (let [os-name (System/getProperty "os.name")]
@@ -14,8 +11,4 @@
 
     :title The window title
     :class The window's class"
-  (constantly current-os))
-
-(defmulti get-screenshot-data
-  "Return screenshot image data."
   (constantly current-os))

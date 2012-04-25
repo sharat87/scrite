@@ -1,5 +1,4 @@
 (ns scrite.wm.linux
-  (:import [java.awt Rectangle Toolkit Robot])
   (:require [clojure.java.shell :as shell])
   (:use [clojure.string :only (trim-newline split split-lines)])
   (:use scrite.wm))
@@ -24,12 +23,6 @@
                             (split % #"\s+" 10))
                          all-window-lines)]
     (first (filter #(= window-id (:id %)) all-windows))))
-
-(defmethod get-screenshot-data :linux
-  []
-  (let [screen-rect (Rectangle. (.getScreenSize (Toolkit/getDefaultToolkit)))
-        capture (.createScreenCapture (Robot.) screen-rect)]
-    capture))
 
 (defn get-active-window-id
   []

@@ -2,7 +2,15 @@
   (:require [scrite.recorders :as recorders]
             [scrite.wm :as wm]
             [scrite.gui :as gui])
+  (:import [java.awt Rectangle Toolkit Robot])
   (:import java.awt.MouseInfo))
+
+(defn get-screenshot-data
+  "Return screenshot image data."
+  []
+  (let [screen-rect (Rectangle. (.getScreenSize (Toolkit/getDefaultToolkit)))
+        capture (.createScreenCapture (Robot.) screen-rect)]
+    capture))
 
 (defn shoot-every
   "Save scrites every `time-gap` seconds, by calling the `save-fn` to save the scrite"
@@ -14,7 +22,7 @@
         (assoc active-window
                :mouse-x (.x mouse-pos)
                :mouse-y (.y mouse-pos))
-        (wm/get-screenshot-data)))
+        (get-screenshot-data)))
     (Thread/sleep (long (* time-gap 1000)))
     (recur time-gap save-fn keep-shooting?)))
 
