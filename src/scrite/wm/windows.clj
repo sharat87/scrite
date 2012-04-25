@@ -25,7 +25,7 @@
   {:title (active-window-title)
    :class (active-window-class)})
 
-(defmethod get-screenshot-data :linux
+(defmethod get-screenshot-data :windows
   []
   (let [screen-rect (Rectangle. (.getScreenSize (Toolkit/getDefaultToolkit)))
         capture (.createScreenCapture (Robot.) screen-rect)]
