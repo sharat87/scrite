@@ -10,7 +10,10 @@
       (.startsWith os-name "Windows") :windows)))
 
 (defmulti active-window-details
-  "Get details about the active window."
+  "Get details about the active window. Returns a hash-map with keys:
+
+    :title The window title
+    :class The window's class"
   (constantly current-os))
 
 (defmulti get-screenshot-data
