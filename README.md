@@ -5,9 +5,9 @@ hell I've been doing all day.
 
 ## Usage
 
-Please note that this is currently linux only. I plan to support windows in the
-near future, but I'll need help with OSX since I don't own one. Any
-contributions are greatly appreciated.
+Please note that this is currently linux and windows only. I'll need help with
+OSX support since I don't own a Mac. Any contributions are greatly appreciated
+:)
 
 Clone this repo, create a directory called shots in it, create a new sqlite
 database like this
